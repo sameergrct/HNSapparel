@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // 👈 enables static HTML export for App Router
 
   eslint: {
     ignoreDuringBuilds: true,
