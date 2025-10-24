@@ -1,21 +1,37 @@
 import { Button } from '@/components/ui/button';
 import { Award, Heart, ShieldCheck, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
-            Our Story
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From a single room to multiple locations, H&S Apparel has been redefining
-            affordable fashion for men across Karachi since 2011.
-          </p>
+
+      {/* --- OUR STORY SECTION WITH BACKGROUND IMAGE --- */}
+      <section className="relative h-[80vh] md:h-[85vh] overflow-hidden">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10" />
+
+        {/* Background image */}
+        <div className="absolute inset-0 bg-[url('https://img.freepik.com/free-photo/portrait-handsome-confident-stylish-hipster-lambersexual-modelman-dressed-black-jacket-jeans-fashion-male-posing-studio-near-grey-wall_158538-24002.jpg?semt=ais_hybrid&w=740&q=80')] bg-cover bg-center">
+
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-20 h-full flex items-center justify-center">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Our Story
+            </h1>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light text-gray-200">
+              From a single room to multiple locations, H&S Apparel has been redefining
+              affordable fashion for men across Karachi since 2011.
+            </p>
+          </div>
         </div>
       </section>
+      {/* --- END OUR STORY SECTION --- */}
 
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -45,9 +61,13 @@ export default function AboutPage() {
             </div>
 
             <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-200">
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                <span className="text-6xl font-bold">H&S</span>
-              </div>
+              <Image
+                src="/assests/store picture/Untitled.png"
+                alt="H&S Apparel Store"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
           </div>
         </div>

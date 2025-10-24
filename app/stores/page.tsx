@@ -8,40 +8,28 @@ const stores = [
     address: 'Rashid Minhas Road, Karachi',
     phone: '0300-9227425',
     hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.8607,
-      lng: 67.0011,
-    },
+    coordinates: { lat: 24.8607, lng: 67.0011 },
   },
   {
     name: 'H&S Apparel - Gulistan-e-Johar',
     address: 'Gulistan-e-Johar Block 13, Karachi',
     phone: '0300-9227425',
     hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.9200,
-      lng: 67.1000,
-    },
+    coordinates: { lat: 24.92, lng: 67.1 },
   },
   {
     name: 'H&S Apparel - North Nazimabad',
     address: 'North Nazimabad Block L, Karachi',
     phone: '0300-9227425',
     hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.9500,
-      lng: 67.0500,
-    },
+    coordinates: { lat: 24.95, lng: 67.05 },
   },
   {
     name: 'H&S Apparel - Saddar',
     address: 'Saddar Town, Karachi',
     phone: '0300-9227425',
     hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.8500,
-      lng: 67.0000,
-    },
+    coordinates: { lat: 24.85, lng: 67.0 },
   },
 ];
 
@@ -66,26 +54,43 @@ const promotions = [
 export default function StoresPage() {
   return (
     <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+      {/* Hero-like Stores Banner */}
+      <section className="relative h-[75vh] md:h-[80vh] bg-black overflow-hidden flex items-center justify-center">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10" />
+
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-[url('https://img.freepik.com/premium-photo/smiling-man-trying-shirt-discussing-fashion-trends-with-salesperson-store-african-american-shopping-mall-customer-wearing-modern-clothes-boutique-while-chatting-with-assistant_482257-61611.jpg')] bg-cover bg-center">
+
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Text Content */}
+        <div className="relative z-20 text-center px-6 sm:px-8 lg:px-12">
+          <h1 className="text-5xl md:text-6xl font-serif text-white mb-6">
             Our Stores
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Visit us at any of our convenient locations across Karachi.
-            Experience our products firsthand and get personalized styling advice.
+          <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
+            Visit us at any of our convenient locations across Karachi.  
+            <span className="block mt-2">
+              Experience our products firsthand and get personalized styling advice.
+            </span>
           </p>
         </div>
       </section>
 
-      <section className="py-16">
+      {/* Store Locations */}
+      <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-black text-center mb-12">
             Store Locations
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {stores.map((store, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <div
+                key={index}
+                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+              >
                 <h3 className="text-xl font-semibold text-black mb-4">{store.name}</h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
@@ -109,6 +114,7 @@ export default function StoresPage() {
         </div>
       </section>
 
+      {/* Map */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-black text-center mb-8">
@@ -120,6 +126,7 @@ export default function StoresPage() {
         </div>
       </section>
 
+      {/* Promotions */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-black text-center mb-12">
@@ -127,7 +134,10 @@ export default function StoresPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {promotions.map((promo, index) => (
-              <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg border border-gray-200">
+              <div
+                key={index}
+                className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg border border-gray-200"
+              >
                 <h3 className="text-xl font-semibold text-black mb-3">{promo.title}</h3>
                 <p className="text-gray-700 mb-4 leading-relaxed">{promo.description}</p>
                 <p className="text-sm text-gray-500 italic">{promo.validUntil}</p>
@@ -145,11 +155,10 @@ export default function StoresPage() {
         </div>
       </section>
 
+      {/* Online CTA */}
       <section className="py-16 bg-black text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Prefer Shopping Online?
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Prefer Shopping Online?</h2>
           <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Browse our complete collection online and get your order delivered right to your doorstep.
           </p>

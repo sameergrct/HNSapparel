@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
 
 export default function ShopPage() {
@@ -93,6 +94,20 @@ export default function ShopPage() {
     setPriceRange([0, maxPrice]);
   };
 
+  const handleMinPriceChange = (value: string) => {
+    const numValue = parseInt(value) || 0;
+    if (numValue >= 0 && numValue <= priceRange[1]) {
+      setPriceRange([numValue, priceRange[1]]);
+    }
+  };
+
+  const handleMaxPriceChange = (value: string) => {
+    const numValue = parseInt(value) || maxPrice;
+    if (numValue >= priceRange[0] && numValue <= maxPrice) {
+      setPriceRange([priceRange[0], numValue]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -155,15 +170,44 @@ export default function ShopPage() {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Price Range: PKR {priceRange[0]} - PKR {priceRange[1]}
+                    Price Range
                   </label>
-                  <Slider
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                    max={maxPrice}
-                    step={100}
-                    className="mt-4"
-                  />
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        type="number"
+                        placeholder="Min"
+                        value={priceRange[0]}
+                        onChange={(e) => handleMinPriceChange(e.target.value)}
+                        className="w-20 text-sm"
+                        min="0"
+                        max={priceRange[1]}
+                        step={100}
+                      />
+                      <span className="text-sm text-gray-500">to</span>
+                      <Input
+                        type="number"
+                        placeholder="Max"
+                        value={priceRange[1]}
+                        onChange={(e) => handleMaxPriceChange(e.target.value)}
+                        className="w-20 text-sm"
+                        min={priceRange[0]}
+                        max={maxPrice}
+                        step={100}
+                      />
+                      <span className="text-sm text-gray-500">PKR</span>
+                    </div>
+                    <Slider
+                      value={priceRange}
+                      onValueChange={setPriceRange}
+                      max={maxPrice}
+                      step={100}
+                      className="mt-2"
+                    />
+                    <div className="text-xs text-gray-500 text-center">
+                      PKR {priceRange[0]} - PKR {priceRange[1]}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

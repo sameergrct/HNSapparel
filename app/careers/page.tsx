@@ -4,18 +4,31 @@ import { Briefcase, Users, TrendingUp, Heart } from 'lucide-react';
 export default function CareersPage() {
   return (
     <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+      {/* Hero-like Careers Banner */}
+      <section className="relative h-[75vh] md:h-[80vh] bg-black overflow-hidden flex items-center justify-center">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10" />
+
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3183171/pexels-photo-3183171.jpeg')] bg-cover bg-center">
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Text Content */}
+        <div className="relative z-20 text-center px-6 sm:px-8 lg:px-12">
+          <h1 className="text-5xl md:text-6xl font-serif text-white mb-6">
             Join Our Team
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Be part of a growing brand that's redefining affordable fashion in Pakistan.
-            We're always looking for talented, passionate individuals to join the H&S family.
+          <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
+            Be part of a growing brand redefining affordable fashion in Pakistan.  
+            <span className="block mt-2">
+              We’re always looking for passionate individuals to join the H&S family.
+            </span>
           </p>
         </div>
       </section>
 
+      {/* Why Work With Us */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -72,6 +85,7 @@ export default function CareersPage() {
         </div>
       </section>
 
+      {/* Open Positions */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -85,26 +99,10 @@ export default function CareersPage() {
 
           <div className="max-w-3xl mx-auto space-y-4">
             {[
-              {
-                title: 'Sales Associate',
-                location: 'Multiple Locations in Karachi',
-                type: 'Full-time',
-              },
-              {
-                title: 'Store Manager',
-                location: 'Karachi',
-                type: 'Full-time',
-              },
-              {
-                title: 'Visual Merchandiser',
-                location: 'Karachi',
-                type: 'Full-time',
-              },
-              {
-                title: 'Customer Service Representative',
-                location: 'Karachi',
-                type: 'Full-time',
-              },
+              { title: 'Sales Associate', location: 'Multiple Locations in Karachi', type: 'Full-time' },
+              { title: 'Store Manager', location: 'Karachi', type: 'Full-time' },
+              { title: 'Visual Merchandiser', location: 'Karachi', type: 'Full-time' },
+              { title: 'Customer Service Representative', location: 'Karachi', type: 'Full-time' },
             ].map((position, index) => (
               <div
                 key={index}
@@ -112,9 +110,7 @@ export default function CareersPage() {
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div className="mb-4 md:mb-0">
-                    <h3 className="text-xl font-semibold text-black mb-2">
-                      {position.title}
-                    </h3>
+                    <h3 className="text-xl font-semibold text-black mb-2">{position.title}</h3>
                     <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                       <span>{position.location}</span>
                       <span>•</span>
@@ -122,7 +118,7 @@ export default function CareersPage() {
                     </div>
                   </div>
                   <Button asChild>
-                    <a href="mailto:career@hnsapparel.com?subject=Application for {position.title}">
+                    <a href={`mailto:career@hnsapparel.com?subject=Application for ${position.title}`}>
                       Apply Now
                     </a>
                   </Button>
@@ -133,6 +129,7 @@ export default function CareersPage() {
         </div>
       </section>
 
+      {/* General Application CTA */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-8 md:p-12 text-center">
@@ -149,12 +146,16 @@ export default function CareersPage() {
               </a>
             </Button>
             <p className="text-sm text-gray-500 mt-4">
-              Email: <a href="mailto:career@hnsapparel.com" className="hover:text-black">career@hnsapparel.com</a>
+              Email:{' '}
+              <a href="mailto:career@hnsapparel.com" className="hover:text-black">
+                career@hnsapparel.com
+              </a>
             </p>
           </div>
         </div>
       </section>
 
+      {/* Final CTA */}
       <section className="py-16 bg-black text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold">

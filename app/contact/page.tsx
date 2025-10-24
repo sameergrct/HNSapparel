@@ -7,49 +7,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
+import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
 import GoogleMap from '@/components/GoogleMap';
 
-import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
 const stores = [
   {
     name: 'H&S Apparel - Main Branch',
     address: 'Rashid Minhas Road, Karachi',
     phone: '0300-9227425',
     hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.8607,
-      lng: 67.0011,
-    },
-  },
-  {
-    name: 'H&S Apparel - Gulistan-e-Johar',
-    address: 'Gulistan-e-Johar Block 13, Karachi',
-    phone: '0300-9227425',
-    hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.9200,
-      lng: 67.1000,
-    },
-  },
-  {
-    name: 'H&S Apparel - North Nazimabad',
-    address: 'North Nazimabad Block L, Karachi',
-    phone: '0300-9227425',
-    hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.9500,
-      lng: 67.0500,
-    },
-  },
-  {
-    name: 'H&S Apparel - Saddar',
-    address: 'Saddar Town, Karachi',
-    phone: '0300-9227425',
-    hours: '10:00 AM - 10:00 PM',
-    coordinates: {
-      lat: 24.8500,
-      lng: 67.0000,
-    },
+    coordinates: { lat: 24.8607, lng: 67.0011 },
   },
 ];
 export default function ContactPage() {
@@ -114,21 +81,33 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+      {/* Hero Section - Full Width Background with Overlay */}
+      <section className="relative h-[75vh] md:h-[80vh] bg-black overflow-hidden flex items-center justify-center">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10" />
+
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3182833/pexels-photo-3182833.jpeg')] bg-cover bg-center">
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Text Content */}
+        <div className="relative z-20 text-center px-6 sm:px-8 lg:px-12">
+          <h1 className="text-5xl md:text-6xl font-serif text-white mb-6">
             Get in Touch
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
             Have a question or feedback? We'd love to hear from you.
-            Reach out to us through any of the channels below.
+            <span className="block mt-2">Reach out through any of the channels below.</span>
           </p>
         </div>
       </section>
 
-      <section className="py-16">
+      {/* Contact Form + Info Section */}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Form */}
             <div>
               <h2 className="text-3xl font-bold text-black mb-8">Send Us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -176,6 +155,7 @@ export default function ContactPage() {
               </form>
             </div>
 
+            {/* Contact Info */}
             <div>
               <h2 className="text-3xl font-bold text-black mb-8">Contact Information</h2>
               <div className="space-y-6">
@@ -218,7 +198,11 @@ export default function ContactPage() {
                     <p className="text-gray-600">
                       Multiple locations across Karachi
                       <br />
-                      See our <a href="/stores" className="text-black hover:underline">stores page</a> for details
+                      See our{' '}
+                      <a href="/stores" className="text-black hover:underline">
+                        stores page
+                      </a>{' '}
+                      for details
                     </p>
                   </div>
                 </div>
@@ -255,15 +239,16 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Map Section */}
       <section className="py-16 bg-gray-50">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-black text-center mb-8">
-                  Find Us on the Map
-                </h2>
-                <div className="bg-white rounded-lg overflow-hidden shadow-lg aspect-[16/9]">
-                  <GoogleMap stores={stores} />
-                </div>
-              </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-black text-center mb-8">
+            Find Us on the Map
+          </h2>
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg aspect-[16/9]">
+            <GoogleMap stores={stores} />
+          </div>
+        </div>
       </section>
     </div>
   );

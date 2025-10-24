@@ -16,10 +16,10 @@ interface Store {
 interface GoogleMapProps {
   stores: Store[];
 }
-  const dhaPhase7Coords = {
-    lat: 24.8289056,
-    lng: 67.0738172
-  };
+const dhaPhase7Coords = {
+  lat: 24.8289056,
+  lng: 67.0738172
+};
 export default function GoogleMap({ stores }: GoogleMapProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
@@ -27,7 +27,7 @@ export default function GoogleMap({ stores }: GoogleMapProps) {
   const searchQuery = "H&S Apparel Karachi";
   
   // Use Google Maps with search - no API key required
-  const embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.0!2d${dhaPhase7Coords.lng}!3d${dhaPhase7Coords.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33d2b0cbbe2b1%3A0xbbf4a816812c6e09!2sH%26S%20Apparel!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus`;
+  const embedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.0!2d${dhaPhase7Coords.lng}!3d${dhaPhase7Coords.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33d2b0cbbe2b1%3A0xbbf4a816812c6e09!2sH%26S%20Apparel!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus';
   return (
     <div className="w-full h-full">
       <div className="w-full h-full rounded-lg overflow-hidden">

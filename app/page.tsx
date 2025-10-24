@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import ProductCard from '@/components/ProductCard';
 import { supabase } from '@/lib/supabase';
 import { ArrowRight } from 'lucide-react';
@@ -40,25 +39,37 @@ export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
   const categories = await getCategories();
 
+  // ✅ 4 fallback images for different categories
+  const fallbackImages = [
+    'https://shopduer.eu/cdn/shop/files/MSTS1013-LIVE-LITE-JOURNEY-SHORT-SAPPHIRE_7___FT_1.jpg?v=1741105380',
+    'https://indusrobe.com/cdn/shop/files/men-s-grey-slim-fit-fleece-trousers-indusrobe-1.jpg?v=1714114730&width=600',
+    'https://img.drz.lazcdn.com/static/pk/p/5f7d6f2e8ca06bac2eff789406fdf1a1.jpg_960x960q80.jpg_.webp',
+    'https://www.sainly.com/cdn/shop/files/men_selegantweddingsuit-2023-08-11T161615.464_efd7af66-9df9-46d8-90ab-1e43f1f8b187_1024x1024.png?v=1691756385',
+  ];
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - Full Width Banner with Elegant Overlay */}
+      {/* HERO SECTION */}
       <section className="relative h-[85vh] md:h-[90vh] bg-black overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10" />
-        {/* Hero Image Placeholder - Replace with actual hero image */}
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/30" />
         </div>
-<div className="relative z-20 h-full flex items-center justify-center">
+
+        <div className="relative z-20 h-full flex items-center justify-center">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 text-center">
             <div className="space-y-8 animate-fade-in">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white tracking-wide leading-tight">
                 Affordable European-Style
-                <span className="block mt-4 text-amber-100 font-light italic">Fashion for Men</span>
+                <span className="block mt-4 text-amber-100 font-light italic">
+                  Fashion for Men
+                </span>
               </h1>
               <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed font-light tracking-wide">
                 Redefining affordable fashion for the modern man since 2011.
-                <span className="block mt-2">Premium quality meets unbeatable pricing.</span>
+                <span className="block mt-2">
+                  Premium quality meets unbeatable pricing.
+                </span>
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
                 <Button
@@ -90,7 +101,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      {/* Featured Collections - Grid Layout with Overlay */}
+
+      {/* FEATURED COLLECTIONS */}
       {categories.length > 0 && (
         <section className="py-24 md:py-32 bg-white">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -108,54 +120,50 @@ export default async function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/shop?category=${category.slug}`}
-                  className="group relative overflow-hidden bg-black aspect-[3/4] transition-all duration-500 hover:shadow-2xl"
-                >
-                  <div className="absolute inset-0 overflow-hidden">
-                    {category.image_url ? (
-                      <img
-                        src={category.image_url}
-                        alt={category.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
-                        <span className="text-7xl font-serif text-white/20">
-                          {category.name.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-70 group-hover:opacity-80 transition-opacity duration-500" />
-
-                  {/* Content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-8">
-                    <h3 className="text-2xl md:text-3xl font-serif text-white mb-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 tracking-wide">
-                      {category.name}
-                    </h3>
-                    {category.description && (
-                      <p className="text-sm text-gray-300 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-light">
-                        {category.description}
-                      </p>
-                    )}
-                    <div className="mt-4 flex items-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <span className="text-sm tracking-widest font-medium">DISCOVER</span>
-                      <ArrowRight className="ml-2 h-4 w-4" />
+              {categories.map((category, index) => {
+                const imageUrl =
+                  category.image_url || fallbackImages[index % fallbackImages.length];
+                return (
+                  <Link
+                    key={category.id}
+                    href={`/shop?category=${category.slug}`}
+                    className="group relative overflow-hidden aspect-[3/4] rounded-2xl transition-all duration-500 hover:shadow-2xl"
+                  >
+                    {/* Background Image */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${imageUrl})` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-500" />
                     </div>
-                  </div>
-                </Link>
-              ))}
+
+                    {/* Content Overlay */}
+                    <div className="relative z-10 flex flex-col justify-end h-full p-8 text-center">
+                      <h3 className="text-2xl md:text-3xl font-serif text-white mb-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 tracking-wide">
+                        {category.name}
+                      </h3>
+                      {category.description && (
+                        <p className="text-sm text-gray-300 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-light">
+                          {category.description}
+                        </p>
+                      )}
+                      <div className="mt-4 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span className="text-sm tracking-widest font-medium">
+                          DISCOVER
+                        </span>
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
       )}
 
-      {/* Our Story Section - Elegant Typography */}
+      {/* OUR STORY SECTION */}
       <section className="py-24 md:py-32 bg-stone-50">
         <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
           <div className="text-center space-y-10">
@@ -184,8 +192,7 @@ export default async function Home() {
         </div>
       </section>
 
-      
-      {/* Featured Products - Fashion E-commerce Style */}
+      {/* FEATURED PRODUCTS */}
       {featuredProducts.length > 0 && (
         <section className="py-24 md:py-32 bg-stone-50">
           <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -229,9 +236,8 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Newsletter Section - Premium Dark Section */}
+      {/* NEWSLETTER SECTION */}
       <section className="relative py-24 md:py-32 bg-black text-white overflow-hidden">
-        {/* Subtle Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]" />
         </div>
@@ -254,7 +260,6 @@ export default async function Home() {
               <NewsletterForm />
             </div>
 
-            {/* Social Proof */}
             <div className="pt-8 flex items-center justify-center gap-2 text-sm text-gray-400 font-light tracking-wide">
               <span className="inline-block w-2 h-2 bg-amber-600 rounded-full animate-pulse" />
               <span>Join 10,000+ fashion enthusiasts</span>
@@ -262,55 +267,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }
-
-/*
-  IMPORTANT: Add these styles to your global CSS file or tailwind.config.js:
-
-  1. Add Google Fonts to your index.html or layout:
-     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-  2. Add to your tailwind.config.js:
-     theme: {
-       extend: {
-         fontFamily: {
-           serif: ['Playfair Display', 'serif'],
-           sans: ['Inter', 'sans-serif'],
-         },
-         keyframes: {
-           'fade-in': {
-             '0%': { opacity: '0', transform: 'translateY(20px)' },
-             '100%': { opacity: '1', transform: 'translateY(0)' },
-           },
-         },
-         animation: {
-           'fade-in': 'fade-in 1.2s ease-out',
-         },
-       },
-     }
-
-  Or add to your global CSS:
-     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
-
-     @keyframes fade-in {
-       from {
-         opacity: 0;
-         transform: translateY(20px);
-       }
-       to {
-         opacity: 1;
-         transform: translateY(0);
-       }
-     }
-
-     .animate-fade-in {
-       animation: fade-in 1.2s ease-out;
-     }
-
-     .font-serif {
-       font-family: 'Playfair Display', serif;
-     }
-*/
