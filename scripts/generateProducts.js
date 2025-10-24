@@ -97,7 +97,7 @@ async function createCategories() {
         name: categoryData.categoryName,
         slug: categoryData.categorySlug,
         description: categoryData.description,
-        image_url: `/assests/${folderName}/img-1.jpg`
+        image_url: `neon://${folderName}/img-1.jpg`
       }, { onConflict: 'slug' })
       .select();
     
@@ -135,7 +135,7 @@ async function createProducts() {
       // Generate image array (use first 4 images for gallery)
       const images = [];
       for (let j = 1; j <= Math.min(4, categoryData.imageCount); j++) {
-        images.push(`/assests/${folderName}/img-${j}.jpg`);
+        images.push(`neon://${folderName}/img-${j}.jpg`);
       }
       
       const { data, error } = await supabase
@@ -146,7 +146,7 @@ async function createProducts() {
           description: description,
           price: Math.round(price),
           category_id: category.id,
-          image_url: `/assests/${folderName}/img-${(i % categoryData.imageCount) + 1}.jpg`,
+          image_url: `neon://${folderName}/img-${(i % categoryData.imageCount) + 1}.jpg`,
           images: images,
           sizes: ['S', 'M', 'L', 'XL', 'XXL'],
           stock: Math.floor(Math.random() * 50) + 10, // Random stock between 10-60

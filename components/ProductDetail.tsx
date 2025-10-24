@@ -1,36 +1,64 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { useCart } from '@/contexts/CartContext';
-import { useToast } from '@/hooks/use-toast';
-import { Minus, Plus, ShoppingCart } from 'lucide-react';
-import { Product } from '@/types/database';
-import { getLocalProductGallery, getLocalProductImage } from '@/lib/imageMapping';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Product } from "@/types/database";
+import {
+  getLocalProductGallery,
+  getLocalProductImage,
+  getProductGallery,
+} from "@/lib/imageMapping";
 
 interface ProductDetailProps {
   product: Product & { categories?: { name: string; slug: string } };
 }
 
 export default function ProductDetail({ product }: ProductDetailProps) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes[0] || 'M');
+  const [selectedSize, setSelectedSize] = useState(product.sizes[0] || "M");
   const [quantity, setQuantity] = useState(1);
-  // Always use local assets instead of database images
-  const images = getLocalProductGallery(product, 4);
-  const [mainImage, setMainImage] = useState(images[0]);
+  const [images, setImages] = useState<string[]>([]);
+  const [mainImage, setMainImage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const loadNeonImages = async () => {
+      try {
+        const neonImages = await getProductGallery(product, 4);
+        setImages(neonImages);
+        setMainImage(neonImages[0]);
+        setHasError(false);
+      } catch (error) {
+        console.error("Error loading Neon images:", error);
+        setHasError(true);
+        // Set placeholder images
+        const placeholder =
+          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+";
+        setImages([placeholder]);
+        setMainImage(placeholder);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadNeonImages();
+  }, [product]);
 
   // images already computed above
 
   const handleAddToCart = () => {
     if (product.stock <= 0) {
       toast({
-        title: 'Out of stock',
-        description: 'This product is currently out of stock.',
-        variant: 'destructive',
+        title: "Out of stock",
+        description: "This product is currently out of stock.",
+        variant: "destructive",
       });
       return;
     }
@@ -45,7 +73,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     });
 
     toast({
-      title: 'Added to cart',
+      title: "Added to cart",
       description: `${product.name} (${selectedSize}) has been added to your cart.`,
     });
   };
@@ -55,12 +83,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-4">
           <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-gray-100 group">
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+            )}
             <Image
               src={mainImage}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-110"
               priority
+              onLoad={() => setIsLoading(false)}
             />
           </div>
 
@@ -71,7 +103,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   key={index}
                   onClick={() => setMainImage(image)}
                   className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
-                    mainImage === image ? 'border-black' : 'border-gray-200 hover:border-gray-400'
+                    mainImage === image
+                      ? "border-black"
+                      : "border-gray-200 hover:border-gray-400"
                   }`}
                 >
                   <Image
@@ -100,7 +134,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">
               {product.name}
             </h1>
-            <p className="text-2xl font-semibold text-black">PKR {product.price}</p>
+            <p className="text-2xl font-semibold text-black">
+              PKR {product.price}
+            </p>
           </div>
 
           {product.description && (
@@ -116,7 +152,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 {product.sizes.map((size) => (
                   <Button
                     key={size}
-                    variant={selectedSize === size ? 'default' : 'outline'}
+                    variant={selectedSize === size ? "default" : "outline"}
                     onClick={() => setSelectedSize(size)}
                     className="min-w-[60px]"
                   >
@@ -137,7 +173,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
-                <span className="text-lg font-medium w-12 text-center">{quantity}</span>
+                <span className="text-lg font-medium w-12 text-center">
+                  {quantity}
+                </span>
                 <Button
                   variant="outline"
                   size="icon"
@@ -148,7 +186,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </Button>
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                {product.stock > 0
+                  ? `${product.stock} in stock`
+                  : "Out of stock"}
               </p>
             </div>
           </div>
@@ -160,18 +200,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             className="w-full text-base"
           >
             <ShoppingCart className="mr-2 h-5 w-5" />
-            {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
           </Button>
 
           <div className="border-t pt-6 space-y-3 text-sm text-gray-600">
             <p>
-              <span className="font-medium text-black">Free delivery</span> on orders over PKR 2,000
+              <span className="font-medium text-black">Free delivery</span> on
+              orders over PKR 2,000
             </p>
             <p>
-              <span className="font-medium text-black">Easy returns</span> within 7 days
+              <span className="font-medium text-black">Easy returns</span>{" "}
+              within 7 days
             </p>
             <p>
-              <span className="font-medium text-black">Secure payment</span> with multiple options
+              <span className="font-medium text-black">Secure payment</span>{" "}
+              with multiple options
             </p>
           </div>
         </div>

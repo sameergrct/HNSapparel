@@ -1,12 +1,53 @@
-import { Button } from '@/components/ui/button';
-import { Award, Heart, ShieldCheck, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Award, Heart, ShieldCheck, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { getNeonStoreImage } from "@/lib/neonImages";
 
 export default function AboutPage() {
+  const [storeImageSrc, setStoreImageSrc] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const loadStoreImage = async () => {
+      try {
+        // Try to get the store image by name "Untitled.png"
+        const response = await fetch("/api/images?name=Untitled.png");
+        if (!response.ok) {
+          throw new Error("Failed to fetch store image");
+        }
+        const data = await response.json();
+
+        if (data.image) {
+          // Convert the image data to base64
+          const base64 = Buffer.from(data.image.data).toString("base64");
+          const imageSrc = `data:image/png;base64,${base64}`;
+          setStoreImageSrc(imageSrc);
+          setHasError(false);
+        } else {
+          throw new Error("Store image not found");
+        }
+      } catch (error) {
+        console.error("Error loading store image from Neon:", error);
+        setHasError(true);
+        // Set placeholder image
+        setStoreImageSrc(
+          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadStoreImage();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
-
       {/* --- OUR STORY SECTION WITH BACKGROUND IMAGE --- */}
       <section className="relative h-[80vh] md:h-[85vh] overflow-hidden">
         {/* Gradient overlay */}
@@ -14,19 +55,16 @@ export default function AboutPage() {
 
         {/* Background image */}
         <div className="absolute inset-0 bg-[url('https://img.freepik.com/free-photo/portrait-handsome-confident-stylish-hipster-lambersexual-modelman-dressed-black-jacket-jeans-fashion-male-posing-studio-near-grey-wall_158538-24002.jpg?semt=ais_hybrid&w=740&q=80')] bg-cover bg-center">
-
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
         {/* Content */}
         <div className="relative z-20 h-full flex items-center justify-center">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-white">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Our Story
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Story</h1>
             <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light text-gray-200">
-              From a single room to multiple locations, H&S Apparel has been redefining
-              affordable fashion for men across Karachi since 2011.
+              From a single room to multiple locations, H&S Apparel has been
+              redefining affordable fashion for men across Karachi since 2011.
             </p>
           </div>
         </div>
@@ -42,32 +80,48 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  In 2011, H&S Apparel started with a simple vision: to bring European-inspired
-                  fashion to Pakistani men at prices that don't break the bank. What began as
-                  a modest operation in a small room has now grown into one of Karachi's most
-                  trusted menswear brands.
+                  In 2011, H&S Apparel started with a simple vision: to bring
+                  European-inspired fashion to Pakistani men at prices that
+                  don't break the bank. What began as a modest operation in a
+                  small room has now grown into one of Karachi's most trusted
+                  menswear brands.
                 </p>
                 <p>
-                  Our founder recognized a gap in the market—men wanted quality clothing with
-                  contemporary designs, but most options were either too expensive or lacked
-                  the style they desired. H&S Apparel was born to bridge that gap.
+                  Our founder recognized a gap in the market—men wanted quality
+                  clothing with contemporary designs, but most options were
+                  either too expensive or lacked the style they desired. H&S
+                  Apparel was born to bridge that gap.
                 </p>
                 <p>
-                  Over the years, we've served thousands of satisfied customers, expanded to
-                  multiple retail locations across Karachi, and built a reputation for reliability,
-                  quality, and unbeatable value.
+                  Over the years, we've served thousands of satisfied customers,
+                  expanded to multiple retail locations across Karachi, and
+                  built a reputation for reliability, quality, and unbeatable
+                  value.
                 </p>
               </div>
             </div>
 
             <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-200">
-              <Image
-                src="/assests/store picture/Untitled.png"
-                alt="H&S Apparel Store"
-                fill
-                className="object-cover"
-                priority
-              />
+              {isLoading && (
+                <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+              )}
+              {storeImageSrc && (
+                <Image
+                  src={storeImageSrc}
+                  alt="H&S Apparel Store"
+                  fill
+                  className="object-cover"
+                  priority
+                  onLoad={() => setIsLoading(false)}
+                />
+              )}
+              {hasError && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                  <div className="text-center text-gray-500">
+                    <div className="text-sm">Store image not available</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -83,9 +137,12 @@ export default function AboutPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black text-white">
                 <Award className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold text-black">Premium Quality</h3>
+              <h3 className="text-xl font-semibold text-black">
+                Premium Quality
+              </h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                European-inspired designs crafted with attention to detail and superior materials.
+                European-inspired designs crafted with attention to detail and
+                superior materials.
               </p>
             </div>
 
@@ -93,7 +150,9 @@ export default function AboutPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black text-white">
                 <TrendingUp className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold text-black">Unbeatable Pricing</h3>
+              <h3 className="text-xl font-semibold text-black">
+                Unbeatable Pricing
+              </h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 Affordable fashion that doesn't compromise on style or quality.
               </p>
@@ -103,9 +162,12 @@ export default function AboutPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black text-white">
                 <Heart className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold text-black">Customer Trust</h3>
+              <h3 className="text-xl font-semibold text-black">
+                Customer Trust
+              </h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Building lasting relationships through honest service and reliable products.
+                Building lasting relationships through honest service and
+                reliable products.
               </p>
             </div>
 
@@ -115,7 +177,8 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-semibold text-black">Consistency</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Delivering the same high standards across all our products and services.
+                Delivering the same high standards across all our products and
+                services.
               </p>
             </div>
           </div>
@@ -129,18 +192,33 @@ export default function AboutPage() {
               Our Product Range
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              From formal trousers to casual shorts, we offer a complete wardrobe solution
-              for the modern man who values both style and affordability.
+              From formal trousers to casual shorts, we offer a complete
+              wardrobe solution for the modern man who values both style and
+              affordability.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
               {[
-                { name: 'Branded Trousers', desc: 'Premium formal wear for the professional man' },
-                { name: 'Cotton Pants', desc: 'Comfortable everyday essentials' },
-                { name: 'Linen Trousers', desc: 'Breathable style for warm weather' },
-                { name: 'Branded Shorts', desc: 'Casual comfort meets contemporary design' },
+                {
+                  name: "Branded Trousers",
+                  desc: "Premium formal wear for the professional man",
+                },
+                {
+                  name: "Cotton Pants",
+                  desc: "Comfortable everyday essentials",
+                },
+                {
+                  name: "Linen Trousers",
+                  desc: "Breathable style for warm weather",
+                },
+                {
+                  name: "Branded Shorts",
+                  desc: "Casual comfort meets contemporary design",
+                },
               ].map((item) => (
                 <div key={item.name} className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-black mb-2">{item.name}</h3>
+                  <h3 className="text-lg font-semibold text-black mb-2">
+                    {item.name}
+                  </h3>
                   <p className="text-sm text-gray-600">{item.desc}</p>
                 </div>
               ))}
@@ -155,14 +233,19 @@ export default function AboutPage() {
             Join the H&S Family
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Experience the perfect blend of European style, premium quality, and unbeatable
-            prices. Visit our stores or shop online today.
+            Experience the perfect blend of European style, premium quality, and
+            unbeatable prices. Visit our stores or shop online today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button size="lg" variant="secondary" asChild>
               <Link href="/shop">Shop Now</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="border-black text-black hover:bg-gray-400 hover:text-black">
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+              className="border-black text-black hover:bg-gray-400 hover:text-black"
+            >
               <Link href="/stores">Visit Our Stores</Link>
             </Button>
           </div>
